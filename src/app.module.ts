@@ -7,7 +7,11 @@ import { HelloController } from './hello.controller';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      // NODE_ENV=production loads .env.production first; .env fills any gaps
+      envFilePath: [`.env.${process.env.NODE_ENV ?? 'development'}`, '.env'],
+    }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
