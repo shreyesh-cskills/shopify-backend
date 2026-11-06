@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
+import { HelloController } from './hello.controller';
 
 @Module({
   imports: [
@@ -19,5 +20,6 @@ import { OrdersModule } from './orders/orders.module';
     ProductsModule,
     OrdersModule,
   ],
+  controllers: [HelloController],
 })
 export class AppModule {}
