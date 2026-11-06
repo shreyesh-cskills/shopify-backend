@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductsModule } from './products/products.module';
-import { OrdersModule } from './orders/orders.module';
+import { ConfigModule } from '@nestjs/config';
 import { HelloController } from './hello.controller';
+import { TestRecordsController } from './test-records.controller';
 
+// Database (TypeORM/Postgres) and the products/orders modules are disabled for now.
+// To re-enable, restore TypeOrmModule.forRootAsync(...) plus ProductsModule and OrdersModule
+// in `imports` (see git history).
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -12,18 +13,7 @@ import { HelloController } from './hello.controller';
       // NODE_ENV=production loads .env.production first; .env fills any gaps
       envFilePath: [`.env.${process.env.NODE_ENV ?? 'development'}`, '.env'],
     }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'postgres',
-        url: config.getOrThrow<string>('DATABASE_URL'),
-        autoLoadEntities: true,
-        synchronize: config.get('DB_SYNC', 'false') === 'true',
-      }),
-    }),
-    ProductsModule,
-    OrdersModule,
   ],
-  controllers: [HelloController],
+  controllers: [HelloController, TestRecordsController],
 })
 export class AppModule {}
